@@ -2,7 +2,7 @@
   "name": "hem-chat-app",
   "version": "0.1.0",
   "private": true,
-  "proxy": "https://chatapp-api.onrender.com",
+  "proxy": "https://chatapp-api-d3a8.onrender.com",
   "dependencies": {
     "@chakra-ui/react": "^2.7.0",
     "@emotion/react": "^11.11.1",
