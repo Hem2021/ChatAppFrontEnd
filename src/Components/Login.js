@@ -60,10 +60,10 @@ function Login() {
 
   React.useEffect(() => {
     console.log(email);
-}, [email]);
-React.useEffect(() => {
+  }, [email]);
+  React.useEffect(() => {
     console.log(password);
-}, [password]);
+  }, [password]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -74,8 +74,8 @@ React.useEffect(() => {
       setAlert({ active: true, cause: "warning", msg: "Input all fields" });
       return;
     }
-    
-    console.log(email," ", password);
+
+    console.log(email, " ", password);
     setLoading(true);
 
     try {
@@ -85,10 +85,10 @@ React.useEffect(() => {
         },
       };
       const { data } = await axios.post(
-        "/api/user/login",
+        "https://chatapp-api-d3a8.onrender.com/api/user/login",
         {
           email: email,
-          password : password,
+          password: password,
         },
         config
       );
@@ -101,8 +101,8 @@ React.useEffect(() => {
 
       }
 
-         //saves the userInfo in the local storage of the browser in use
-         localStorage.setItem("userInfo", JSON.stringify(data));
+      //saves the userInfo in the local storage of the browser in use
+      localStorage.setItem("userInfo", JSON.stringify(data));
       setLoading(false);
       // history.push("/chats");   // useHistory() is deprecated
       navigate("/app/welcome");   // useNavigate() is is the new way of using browser history object
@@ -145,7 +145,7 @@ React.useEffect(() => {
             name="email"
             onChange={(e) => setEmail(e.target.value)}
             autoComplete="email"
-            
+
             autoFocus
           />
           <TextField

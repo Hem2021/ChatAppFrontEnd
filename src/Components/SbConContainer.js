@@ -51,7 +51,7 @@ function SbConContainer() {
             }
         };
 
-        axios.get('/api/chat', config)
+        axios.get('https://chatapp-api-d3a8.onrender.com/api/chat', config)
             .then((res) => {
                 var { data } = res;
                 console.log('Chats refreshed in sb container: ', data);
