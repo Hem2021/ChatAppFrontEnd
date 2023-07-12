@@ -9,7 +9,8 @@ import { Outlet, useOutletContext } from 'react-router-dom'
 import ContextProvider, { globalContext } from '../Contex/ContextProvider'
 import io from 'socket.io-client';
 import { getLoggedUser } from './misc/utili'
-const ENDPOINT = "http://localhost:4000"
+// const ENDPOINT = "http://localhost:4000"  //dev
+const ENDPOINT = "https://chatapp-api.onrender.com"
 var socket;
 
 function MainContainer() {
