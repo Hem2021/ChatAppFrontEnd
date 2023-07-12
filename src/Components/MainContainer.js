@@ -10,7 +10,7 @@ import ContextProvider, { globalContext } from '../Contex/ContextProvider'
 import io from 'socket.io-client';
 import { getLoggedUser } from './misc/utili'
 // const ENDPOINT = "http://localhost:4000"  //dev
-const ENDPOINT = "https://chatapp-api.onrender.com"
+const ENDPOINT = "https://chatapp-api-d3a8.onrender.com"
 var socket;
 
 function MainContainer() {
