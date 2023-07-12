@@ -21,7 +21,7 @@ function App() {
   var navigate = useNavigate();
 
   
-  var user = getLoggedUser();
+  // var user = getLoggedUser();
 
  
 
