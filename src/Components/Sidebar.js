@@ -52,7 +52,7 @@ function Sidebar() {
 
                 <div className='sb-header-div2'>
                     {/* <IconButton > */}
-                        <IconButton onClick={() => {
+                    <IconButton onClick={() => {
                         navigate('users');
                     }} >
                         <PersonAddIcon className={!lightTheme && "dark"} />

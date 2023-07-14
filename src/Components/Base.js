@@ -18,6 +18,7 @@ import Container from '@mui/material/Container';
 import axios from 'axios';
 import LoadingButton from '@mui/lab/LoadingButton';
 import AlertUser from './AlertUser';
+const SERVER_BASE_URL = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_API_BASE_URL_PROD : process.env.REACT_APP_API_BASE_URL_DEV
 
 // import { createTheme, ThemeProvider } from '@mui/material/styles';
 
@@ -128,7 +129,7 @@ function Base() {
             },
         };
 
-        axios.post('https://chatapp-api-d3a8.onrender.com/api/user', {
+        axios.post(`${SERVER_BASE_URL}api/user`, {
             name: input.name,
             email: input.email,
             password: input.password,
@@ -164,12 +165,14 @@ function Base() {
         setLoading(true);
 
 
-        await axios.post("https://chatapp-api-d3a8.onrender.com/api/user/login", {
+        await axios.post(`${SERVER_BASE_URL}api/user/login`, {
             email: input.email,
             password: input.password,
         }).then((res) => {
             var { data: { data } } = res;
-            console.log(data);
+            console.log("api login req : ", data);
+            console.log('base url :', SERVER_BASE_URL);
+            console.log('node_env ', process.env.NODE_ENV);
             // saves the userInfo in the local storage of the browser in use
             localStorage.setItem("userInfo", JSON.stringify(data));
             setLoading(false);

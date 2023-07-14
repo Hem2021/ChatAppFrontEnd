@@ -10,6 +10,7 @@ import LoadSkeleton from './Loading/LoadSkeleton';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { Center } from '@chakra-ui/react';
 import { getLoggedUser } from './misc/utili';
+const SERVER_BASE_URL = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_API_BASE_URL_PROD : process.env.REACT_APP_API_BASE_URL_DEV
 
 function SbConContainer() {
     const [alert, setAlert] = useState({
@@ -51,7 +52,7 @@ function SbConContainer() {
             }
         };
 
-        axios.get('https://chatapp-api-d3a8.onrender.com/api/chat', config)
+        axios.get(`${SERVER_BASE_URL}api/chat`, config)
             .then((res) => {
                 var { data } = res;
                 console.log('Chats refreshed in sb container: ', data);
