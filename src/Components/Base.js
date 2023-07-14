@@ -128,7 +128,7 @@ function Base() {
             },
         };
 
-        axios.post('/api/user', {
+        axios.post('https://chatapp-api-d3a8.onrender.com/api/user', {
             name: input.name,
             email: input.email,
             password: input.password,
@@ -164,7 +164,7 @@ function Base() {
         setLoading(true);
 
 
-        await axios.post("/api/user/login", {
+        await axios.post("https://chatapp-api-d3a8.onrender.com/api/user/login", {
             email: input.email,
             password: input.password,
         }).then((res) => {
@@ -288,7 +288,7 @@ function Base() {
                                     </Link>
                                 </Grid>
                                 <Grid item>
-                                    <span style={{ color: "blue", cursor:"pointer" }} onClick={()=>setLogin(false)}>
+                                    <span style={{ color: "blue", cursor: "pointer" }} onClick={() => setLogin(false)}>
 
                                         {"Don't have an account? Sign Up"}
                                     </span>
@@ -437,7 +437,7 @@ function Base() {
                             <Grid container justifyContent="flex-end">
 
                                 <Grid item>
-                                <span style={{ color: "blue", cursor:"pointer" }} onClick={()=>setLogin(true)}>
+                                    <span style={{ color: "blue", cursor: "pointer" }} onClick={() => setLogin(true)}>
                                         {console.log(Login)}
 
                                         {"Already have an account? Sign In"}
