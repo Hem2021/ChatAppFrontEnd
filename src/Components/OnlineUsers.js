@@ -4,23 +4,30 @@ import './myStyles.css'
 import { IconButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import AlertUser from './AlertUser';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import { globalContext } from '../Contex/ContextProvider';
 import UserList from './UserList';
 import axios from 'axios';
 import LoadSkeleton from './Loading/LoadSkeleton';
 import { useSelector } from 'react-redux';
-import { getLoggedUser } from './misc/utili';
+import { getBaseUrlForServer, getLoggedUser } from './misc/utili';
+import Button from '@mui/material/Button';
 
+import { act } from 'react-dom/test-utils';
+const SERVER_BASE_URL = getBaseUrlForServer();
 
 function OnlineUsers() {
     var lightTheme = useSelector((state) => { return state.lightTheme });
     const { refresh, setrefresh } = useContext(globalContext);
     var [users, setusers] = useState([]);
+    const [activeUsers, setActiveUsers] = useState([])
+    const [buttonstate, setButtonstate] = useState(false);
+
     // var [searchresult, setsearchresult] = useState([]);
     var [searchinput, setsearchinput] = useState();
     const [Loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    var [socket, socketconnected] = useOutletContext();
 
     const [alert, setAlert] = useState({
         active: false,
@@ -45,34 +52,10 @@ function OnlineUsers() {
     var handleSearch = async () => {
         console.log(`to do : implement handle search for all online users`);
     }
-    // var handleSearch = async () => {
-    //     if (!searchinput) {
-    //         setAlert({ active: true, cause: "warning", msg: "Input all fields" });
-    //         return;
-    //     }
-    //     try {
-    //         setLoading(true);
-    //         const config = {
-    //             headers: {
-    //                 Authorization: `Bearer ${user.token}`,
-    //             },
-    //         };
 
-    //         const { data } = await axios.get(`/api/user?search=${searchinput}`, config);
-
-    //         if (data.length === 0) {
-    //             setAlert({ active: true, cause: "warning", msg: "No users found" });
-    //             setLoading(false);
-    //             // return;
-    //         }
-
-    //         setLoading(false);
-    //         setsearchresult(data);
-    //     } catch (error) {
-    //         setAlert({ active: true, cause: "error", msg: "Failed to load users" });
-    //         setLoading(false);
-    //     }
-    // }
+    var handlebutton = () => {
+        setButtonstate(!buttonstate);
+    }
 
 
     useEffect(() => {
@@ -83,7 +66,7 @@ function OnlineUsers() {
             },
         };
 
-        axios.get(`/api/user`, config)
+        axios.get(`${SERVER_BASE_URL}api/user`, config)
             .then((res) => {
                 const { data } = res;
                 if (data.length === 0) {
@@ -98,7 +81,26 @@ function OnlineUsers() {
                 setAlert({ active: true, cause: "error", msg: "Failed to load users" });
                 setLoading(false);
             })
-    }, [refresh])
+    }, [])
+    // }, [refresh])  //is refresh required?
+
+    useEffect(() => {
+        socket?.emit('get active users');
+        socket?.on('all active users', (res) => {
+            // console.log("res from socket: ", res)
+            // var activeUsers = res;
+            const temp = users?.filter((user) => (res.some((re) => re.user_id === user._id)))
+            // console.log('temp : ', temp)
+            // console.log('users : ', users)
+            setActiveUsers(temp);
+        })
+
+        return () => {
+            socket?.off('get active users')
+        }
+    }, [socket, users])
+
+    console.log('active users : ', activeUsers);
 
     return (
         <div className='ou-container'>
@@ -109,7 +111,7 @@ function OnlineUsers() {
                     fontSize: "1rem",
                     color: "rgba(0, 0, 0, 0.54)",
                     fontWeight: "bold"
-                }}>Online Users</p>
+                }}>All Users</p>
             </div>
             <div className='ou-search'>
                 <IconButton onClick={handleSearch}>
@@ -134,14 +136,29 @@ function OnlineUsers() {
                 />
 
             </div>
+
             {(Loading ? <LoadSkeleton /> : (
+                <div className={"ou-list" + (lightTheme ? "" : " dark")}>
+                    <Button sx={{ borderRadius: "20px" }} color='success' variant="contained" onClick={handlebutton}>{buttonstate ? ("All users") : ("Online Users")}</Button>
+                    {!buttonstate ? (
+                        <>
+                            {users.map((otherusers) => (
+                                <UserList key={otherusers._id} otherusers={otherusers} />
+                            ))}
+                        </>
+                    ) : (
+                        <>
+                            {activeUsers.map((otherusers) => (
+                                <UserList key={otherusers._id} otherusers={otherusers} />
+                            ))}
+                        </>
+                    )}
 
-                <div className={"sb-conversation test" + (lightTheme ? "" : " dark")}>
-                    {users.map((otherusers) => {
 
-                        return <UserList key={otherusers._id} otherusers={otherusers}></UserList>
-                    })}
-                </div>))}
+
+                </div>
+            )
+            )}
 
 
             {alert.active && (<><AlertUser msg={alert.msg} cause={alert.cause} resetState={resetAlertState} /> </>)}

@@ -1,15 +1,17 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { globalContext } from '../Contex/ContextProvider';
 import axios from 'axios';
 import AlertUser from './AlertUser';
-import { getLoggedUser, getotheruserdetails } from './misc/utili';
-import { useNavigate } from 'react-router-dom';
+import { getBaseUrlForServer, getLoggedUser, getotheruserdetails } from './misc/utili';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import LinearLoad from './Loading/LinearLoad';
+const SERVER_BASE_URL = getBaseUrlForServer();
 
 function UserList({ otherusers }) {
     var [loading, setloading] = useState(false);
     var { name, email, _id, pp } = otherusers;
+
     var { refresh, setrefresh } = useContext(globalContext);
     var navigate = useNavigate();
 
@@ -32,6 +34,10 @@ function UserList({ otherusers }) {
         // console.log(alert.active, alert.msg); //this will not log current state as the setAlert performs asynchronous updation
     }
 
+
+
+
+
     var accesschats = async (id) => {
         // try {
         setloading(true)
@@ -42,13 +48,13 @@ function UserList({ otherusers }) {
             },
         };
 
-        axios.post(`/api/chat`, { "id": id }, config)
+        axios.post(`${SERVER_BASE_URL}api/chat`, { "id": id }, config)
             .then((res) => {
                 const { data } = res;
-                console.log("from  user list",data);
+                console.log("from  user list", data);
                 var otheruserdetails = getotheruserdetails(data.users, user._id);
-                console.log("Other user :",otheruserdetails);
-                
+                console.log("Other user :", otheruserdetails);
+
                 localStorage.setItem("otherUserInfo", JSON.stringify(otheruserdetails));
                 setloading(false);
                 setrefresh(!refresh);
@@ -86,6 +92,7 @@ function UserList({ otherusers }) {
     }
 
 
+
     return (
 
         // <div className='ou-item'>
@@ -103,7 +110,7 @@ function UserList({ otherusers }) {
                 <div className={"con-lastMessage" + (lightTheme ? "" : " dark2")}>{email}</div>
             </div>
             <>{alert.active && (<><AlertUser msg={alert.msg} cause={alert.cause} resetState={resetAlertState} /> </>)}</>
-            {loading && <LinearLoad/>}
+            {loading && <LinearLoad />}
         </>
 
     )

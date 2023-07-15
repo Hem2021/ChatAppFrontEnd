@@ -18,8 +18,8 @@ import Container from '@mui/material/Container';
 import axios from 'axios';
 import LoadingButton from '@mui/lab/LoadingButton';
 import AlertUser from './AlertUser';
-const SERVER_BASE_URL = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_API_BASE_URL_PROD : process.env.REACT_APP_API_BASE_URL_DEV
-
+import { getBaseUrlForServer } from './misc/utili';
+const SERVER_BASE_URL = getBaseUrlForServer();
 // import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 function Base() {

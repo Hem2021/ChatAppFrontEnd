@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Icon, IconButton, Skeleton } from '@mui/material';
 import MessageOther from './MessageOther';
@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import { globalContext } from '../Contex/ContextProvider';
 import Profilepic from './Profilepic';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
-import { getLoggedUser, getotheruserdetails } from './misc/utili';
+import { getBaseUrlForServer, getLoggedUser, getotheruserdetails } from './misc/utili';
 import axios from 'axios';
 import LoadSkeleton from './Loading/LoadSkeleton';
 import ScrollableFeed from "react-scrollable-feed";
@@ -18,19 +18,21 @@ import { Socket } from 'socket.io-client';
 import Lottie from "lottie-react"
 import typinganimation from "../animations/typing.json"
 
+const SERVER_BASE_URL = getBaseUrlForServer();
+
 function ChatArea() {
     var [AllMessages, setAllMessages] = useState([]);
-    var [AllMessagesCopy, setAllMessagesCopy] = useState([]);
     var [loading, setloading] = useState(true)
     const [messageContent, setmessageContent] = useState("")
     const [typing, setTyping] = useState(false);
     const [istyping, setIsTyping] = useState(false);
+    var lastMessageRef = useRef(null);
+    const lottieRef = useRef(null);
+
 
     console.log('Chat area fired 1!')
-    const { refresh, setrefresh, notifications, setNotifications } = useContext(globalContext);
+    const { newMessage, setNewMessage, refresh, setrefresh, notifications, setNotifications } = useContext(globalContext);
     var [socket, socketconnected] = useOutletContext();
-    // console.log("fresh socket : ", socket)
-    // console.log('Chat area fired 2!')
     const [alert, setAlert] = useState({
         active: false,
         cause: "",
@@ -65,6 +67,38 @@ function ChatArea() {
         textarea.style.height = 'auto';
         textarea.style.height = `${textarea.scrollHeight}px`;
     }
+
+
+
+
+
+    useEffect(() => {
+        console.log("Messages loaded in Chatarea");
+        const config = {
+            headers: {
+                Authorization: `Bearer ${user.token}`,
+            },
+        };
+        async function fetchchat() {
+            const { data } = await axios.get(`${SERVER_BASE_URL}api/message/${chat_id}`, config);
+            // console.log("fetched chat : ", data)
+            setAllMessages(data);
+            setloading(false);
+
+            console.log("socket in useeffect : ", socket)
+            socket
+                && socket.emit("join chat", { username: user.name, room: chat_id });
+            // setAllMessagesCopy(AllMessages);
+
+        }
+        fetchchat();
+        return () => setloading(true);
+        // }, [chat_id, user._id, user.token]);
+        // }, [refresh, chat_id]);
+    }, [socket, chat_id]);
+
+
+
     const sendMessage = () => {
         console.log("SendMessage Fired to", chat_id);
         socket.emit("stop typing", chat_id);
@@ -75,7 +109,7 @@ function ChatArea() {
         };
         axios
             .post(
-                '/api/message',
+                `${SERVER_BASE_URL}api/message`,
                 {
                     content: messageContent,
                     chatId: chat_id,
@@ -96,80 +130,58 @@ function ChatArea() {
     };
 
 
+    // useEffect(() => {
+    //     console.log("CHAT AREA MOUNTE")
+    //     socket &&
+    //         socket.on("message recieved", (newMessageRecieved) => {
+    //             console.log('on message received : ', newMessageRecieved, "chatID :  ", chat_id);
+    //             if (
+    //                 // !selectedChatCompare || // if chat is not selected or doesn't match current chat
+    //                 chat_id !== newMessageRecieved.chat._id || !chat_id
+    //             ) {
+    //                 console.log("Notification : ", newMessageRecieved);
+    //                 setNotifications((prevNotifs) =>
+    //                     [
+    //                         ...prevNotifs,
+    //                         newMessageRecieved.chat._id
+    //                     ]
+    //                 )
+
+    //             } else {
+    //                 setAllMessages((state) =>
+    //                     [
+    //                         ...state,
+
+    //                         newMessageRecieved
+
+    //                     ]
+
+    //                 )
+    //             }
+
+    //             console.log("msg from socket : ", newMessageRecieved);
+    //             setrefresh((state) => !state);
+    //         });
 
 
+    //     return () => {
+    //         socket?.off('message received');
+    //         console.log("CHAT AREA UNMOUNTED");
+    //     };
+
+    // }, [socket, AllMessages, refresh, notifications]);
 
     useEffect(() => {
-        console.log("Messages loaded in Chatarea");
-        const config = {
-            headers: {
-                Authorization: `Bearer ${user.token}`,
-            },
-        };
-        async function fetchchat() {
-            const { data } = await axios.get(`/api/message/${chat_id}`, config);
-            // console.log("fetched chat : ", data)
-            setAllMessages(data);
-            setloading(false);
+        setAllMessages((state) => [
+            ...state,
+            newMessage
+        ])
 
-            console.log("socket in useeffect : ", socket)
-            socket
-                && socket.emit("join chat", { username: user.name, room: chat_id });
-            // setAllMessagesCopy(AllMessages);
 
-        }
-        fetchchat();
-        return () => setloading(true);
-        // }, [chat_id, user._id, user.token]);
-        // }, [refresh, chat_id]);
-    }, [socket, chat_id]);
+    }, [newMessage])
 
 
 
-
-
-    useEffect(() => {
-        socket &&
-            socket.on("message recieved", (newMessageRecieved) => {
-                if (
-                    // !selectedChatCompare || // if chat is not selected or doesn't match current chat
-                    chat_id !== newMessageRecieved.chat._id
-                ) {
-                    // if (!notification.includes(newMessageRecieved)) {
-                    //     setNotification([newMessageRecieved, ...notification]);
-                    //     setFetchAgain(!fetchAgain);
-                    // } 
-                    //implement notification
-
-
-                    //TO DO : SAVE NOTIFICATION ID TO MAKE IT REFRESH RESISTANT
-                    console.log("Notification : ", newMessageRecieved);
-                    setNotifications((prevNotifs) =>
-                        [
-                            ...prevNotifs,
-                            newMessageRecieved.chat._id
-                        ]
-                    )
-
-                } else {
-                    setAllMessages((state) =>
-                        [
-                            ...state,
-
-                            newMessageRecieved
-
-                        ]
-
-                    )
-                }
-
-                console.log("msg from socket : ", newMessageRecieved);
-                setrefresh((state) => !state);
-            });
-
-
-        return () => socket && socket.off('message recieved');
-    }, [socket, AllMessages, refresh, notifications]);
 
 
     useEffect(() => {
@@ -191,9 +203,6 @@ function ChatArea() {
 
         if (!typing) {
             setTyping(true);
-            console.log('====================================');
-            console.log("inside typing condition : ", typing);
-            console.log('====================================');
             socket.emit("typing", chat_id);
         }
         let lastTypingTime = new Date().getTime();
@@ -209,6 +218,15 @@ function ChatArea() {
             }
         }, timerLength);
     };
+
+    useEffect(() => {
+        // 👇️ scroll to bottom every time messages change
+        lastMessageRef.current?.scrollIntoView({ behavior: 'smooth' });
+        if (istyping) {
+            lottieRef.current?.scrollIntoView({ behavior: 'smooth' }); // Scroll to the <Lottie> component
+        }
+    }, [AllMessages,  istyping]);
+
 
 
 
@@ -232,58 +250,39 @@ function ChatArea() {
                 </IconButton>
             </div>
 
-            <ScrollableFeed className='scroll'>
 
-                {/* <div className={"chatarea-body" + (lightTheme ? "" : " dark")}>
-
-                    {(loading) ? <LoadSkeleton /> : (
-                        AllMessages.slice(0).map((message, index) => {
-                            // AllMessages.slice(0).reverse().map((message, index)=>{
-                            const sender = message.sender;
-                            const self_id = user._id;
-                            if (sender._id === self_id) {
-                                return <MessageSelf props={message} key={index} />
-                            } else {
-                                // console.log("i am from mesage other")
-                                return <MessageOther props={message} key={index} />
-
-                            }
-
+            <div className={"chatarea-body" + (lightTheme ? "" : " dark")}>
+                {loading ? (
+                    <LoadSkeleton />
+                ) : (
+                    AllMessages.slice(0).map((message, index) => {
+                        const sender = message.sender;
+                        const self_id = user._id;
+                        if (sender._id === self_id) {
+                            return <MessageSelf props={message} key={index} />;
+                        } else {
+                            return <MessageOther props={message} key={index} />;
                         }
+                    })
+                )}
+                {/* {"hi"} */}
 
-                        )
-                        {istyping}
-                    )}
-                </div> */}
+                {/* {istyping && <>"typing"</>} */}
+                {console.log("typing status : ", istyping)}
 
-                <div className={"chatarea-body" + (lightTheme ? "" : " dark")}>
-                    {loading ? (
-                        <LoadSkeleton />
-                    ) : (
-                        AllMessages.slice(0).map((message, index) => {
-                            const sender = message.sender;
-                            const self_id = user._id;
-                            if (sender._id === self_id) {
-                                return <MessageSelf props={message} key={index} />;
-                            } else {
-                                return <MessageOther props={message} key={index} />;
-                            }
-                        })
-                    )}
-                    {/* {"hi"} */}
-                    {istyping && (
-                        <Lottie
-                            animationData={typinganimation}
-                            loop={true}
-                            style={{ width: '50px', marginLeft:"10px", height:"20px"}}
-                        />
-                    )}
-                    {/* {istyping && <>"typing"</>} */}
-                    {console.log("typing status : ", istyping)}
-                </div>
+                {(istyping) && (
+                    <Lottie
+                        ref={lottieRef}
+                        animationData={typinganimation}
+                        loop={true}
+                        style={{ width: '50px', marginLeft: "10px", height: "20px" }}
+                    />
+                )}
 
 
-            </ScrollableFeed>
+                <div ref={lastMessageRef}></div>
+            </div>
+
             <div className={"chatarea-input" + (lightTheme ? "" : " dark")}>
                 <div className="input-container">
                     <textarea

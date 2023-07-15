@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import './myStyles.css'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
@@ -9,39 +9,32 @@ import LightModeIcon from '@mui/icons-material/LightMode';
 import { IconButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import ConversationItem from './ConversationItem';
-import { Navigate, useAsyncError, useNavigate } from 'react-router-dom';
+import { Navigate, useAsyncError, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ForumIcon from '@mui/icons-material/Forum';
 
 import { toggleTheme } from '../features/darkMode';
 import SbConContainer from './SbConContainer';
 import BasicMenu from './BasicMenu';
-function Sidebar() {
+import { globalContext } from '../Contex/ContextProvider';
+function Sidebar({ socket, socketconnected }) {
+    const { refresh, setrefresh, notifications, setNotifications } = useContext(globalContext);
     var dispatch = useDispatch();
     var lightTheme = useSelector((state) => { return state.lightTheme });
+    var navigate = useNavigate();
+    const dy = useParams();
     function setLightTheme() {
         dispatch(toggleTheme());
     }
 
+    const chat_id = dy.id;
 
-    var navigate = useNavigate();
-    var [conversations, setConversation] = useState([
-        {
-            name: 'Test1',
-            lastMessage: 'Last Message #1',
-            timeStamp: 'today'
-        },
-        {
-            name: 'Test2',
-            lastMessage: 'Last Message #2',
-            timeStamp: 'today'
-        },
-        {
-            name: 'Test3',
-            lastMessage: 'Last Message #3',
-            timeStamp: 'today'
-        }
-    ])
+    // console.log('====================================');
+    // console.log("chat id from sidebar", chat_id);
+    // console.log('====================================');
+    //     socket?.on("message recieved", (newMessageRecieved) => {
+    //         console.log("new message in sidebar : ", newMessageRecieved);
+    //     })
     return (
         <div className='Sidebar'>
 
@@ -77,19 +70,26 @@ function Sidebar() {
                 </div>
 
                 <div className='sb-header-div3'>
-                    <IconButton>
+                    <IconButton onClick={() => {
+                        navigate('chats')
+                    }}>
                         <ForumIcon className={!lightTheme && "dark"} />
                     </IconButton>
                 </div>
             </div>
 
-            <div className={"sb-search" + (lightTheme ? "" : " dark")} >
-                <IconButton>
-                    <SearchIcon className={!lightTheme && "dark"} />
-                </IconButton>
-                <input className={"sb-search-input" + (lightTheme ? "" : " dark")} placeholder='search'></input>
+            <div className={"web" + (lightTheme ? "" : " dark")}>
+
+                <div className={"sb-search" + (lightTheme ? "" : " dark")} >
+                    <IconButton>
+                        <SearchIcon className={!lightTheme && "dark"} />
+                    </IconButton>
+                    <input className={"sb-search-input" + (lightTheme ? "" : " dark")} placeholder='search'></input>
+                </div>
+                <SbConContainer />
+
             </div>
-            <SbConContainer />
+
         </div>
     )
 }

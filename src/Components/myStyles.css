@@ -25,23 +25,6 @@
     border-radius: 20px;
 }
 
-.Sidebar {
-    flex: 0.3;
-    display: flex;
-    flex-direction: column;
-}
-
-.sb-header {
-    margin: 5px;
-    padding: 10px 5px;
-    border-radius: 20px;
-    display: flex;
-    justify-content: space-between;
-    background-color: white;
-    height: 60px;
-    align-items: center;
-}
-
 .ou-header,
 .gp-header {
     margin: 5px;
@@ -86,7 +69,35 @@
     background-color: #eeeded;
 }
 
-.sb-search,
+.Sidebar {
+    flex: 0.3;
+    display: flex;
+    flex-direction: column;
+}
+
+.sb-header {
+    margin: 5px;
+    padding: 10px 5px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    background-color: white;
+    height: 60px;
+    align-items: center;
+}
+
+.sb-search {
+
+    /* margin: 5px;
+    padding: 10px 15px; */
+    border-radius: 20px;
+    display: flex;
+    height: 60px;
+    background-color: inherit;
+    /* border-bottom: gray; */
+    box-shadow: rgba(149, 145, 145, 0.2) 0px 2px 8px 0px;
+}
+
 .ou-search,
 .gp-search {
     margin: 5px;
@@ -97,7 +108,14 @@
     background-color: white;
 }
 
-.sb-search-input,
+.sb-search-input {
+    border: none;
+    outline-width: 0;
+    font-size: 1rem;
+    flex: 1;
+    border-radius: 20px;
+}
+
 .creategroup-input {
     border: none;
     outline-width: 0;
@@ -105,9 +123,37 @@
     flex: 1;
 }
 
+.web {
+    /* display: flex; */
+    margin: 5px;
+    padding: 10px 15px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    overflow: hidden;
+    gap: 10px;
+    flex: 1;
+}
+
+.mob {
+    /* display: none; */
+}
 
 
 .sb-conversation {
+    /* margin: 5px;
+    padding: 10px 5px; */
+    border-radius: 20px;
+    background-color: white;
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+}
+
+.ou-list {
     margin: 5px;
     padding: 10px 5px;
     border-radius: 20px;
@@ -240,11 +286,6 @@
 
 }
 
-/* .message-box-other {
-    display: flex;
-    word-wrap: break-word;
-    
-} */
 
 .message-box-other {
     margin: 5px;
@@ -257,35 +298,6 @@
     max-width: 200px;
 }
 
-/* .other-text-content {
-    margin: 5px;
-    padding: 10px 5px;
-    border-radius: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    background-color: rgb(225, 241, 174);
-    word-wrap: break-word;
-} */
-
-/* .msg {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 1rem;
-    color: rgba(0, 0, 0, 0.8);
-}
-
-.self-message-container {
-    align-self: flex-end;
-}
-
-.message-box-self {
-    margin: 5px;
-    padding: 10px 5px;
-    border-radius: 20px;
-    display: flex;
-    flex-direction: column;
-    background-color: rgb(239, 241, 222);
-} */
 
 .self-message-container {
     align-self: flex-end;
@@ -433,13 +445,13 @@
 }
 
 @media (max-width: 600px) {
-    .sb-conversation {
+    /* .sb-conversation {
         display: none;
-    }
+    } */
 
-    .sb-search {
+    /* .sb-search {
         display: none;
-    }
+    } */
 
     .Sidebar {
         flex: 0;
@@ -471,20 +483,33 @@
         justify-content: center;
     }
 
-    /* .test {
-        display: block;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        /* align-self: flex-end; */
-    /* justify-self: flex-start; */
-    /* } */
+    .web {
+        /* display: flex; */
+        /* flex-direction: column; */
+        display: none;
+    }
+
 
 
     .chatArea-container,
     .ou-container,
     .group-container,
-    .creategroup-container {
+    .creategroup-container,
+    .welcome-container {
+        flex: 1;
+    }
+
+    .mob {
+        /* display: block;
+        flex: 1; */
+        margin: 5px;
+        padding: 10px 15px;
+        border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+        background-color: white;
+        overflow: hidden;
+        gap: 10px;
         flex: 1;
     }
 
@@ -494,8 +519,8 @@
 
     .MainContainer,
     .login-container {
-        /* width: 100vw; */
-        /* height: 100vh; */
+        width: 100vw;
+        height: 100vh;
         border-radius: 0px;
     }
 

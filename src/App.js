@@ -15,6 +15,7 @@ import SignUp from './Components/Test';
 import { useEffect, useState } from 'react';
 
 import { getLoggedUser } from './Components/misc/utili';
+import Chats from './Components/Chats';
 
 
 function App() {
@@ -54,13 +55,10 @@ function App() {
       {/* <Button colorScheme='blue'>Button</Button> */}
       <Routes>
         <Route path='/' element={<Base />} />
-        {/* <Route path='login' element={<Login />}></Route>
-          <Route path='signUp' element={<SignUp />}></Route> */}
-        {/* <Route path='/test' element={<Test />} /> */}
-        {/* <Route path='/1' element={<Test />} /> */}
 
         <Route path='app' element={<MainContainer />} >
           <Route path='welcome' element={<WelcomeArea />} />
+          <Route path='chats' element={<Chats />} />
           <Route path='chat/:id' element={<ChatArea />} />
           {/* <Route path='chat' element={<ChatArea />} /> */}
           <Route path='users' element={<OnlineUsers />} />

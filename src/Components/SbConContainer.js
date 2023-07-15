@@ -9,8 +9,8 @@ import AlertUser from './AlertUser';
 import LoadSkeleton from './Loading/LoadSkeleton';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { Center } from '@chakra-ui/react';
-import { getLoggedUser } from './misc/utili';
-const SERVER_BASE_URL = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_API_BASE_URL_PROD : process.env.REACT_APP_API_BASE_URL_DEV
+import { getBaseUrlForServer, getLoggedUser } from './misc/utili';
+const SERVER_BASE_URL = getBaseUrlForServer();
 
 function SbConContainer() {
     const [alert, setAlert] = useState({
@@ -65,11 +65,8 @@ function SbConContainer() {
                 setloading(false);
             });
     }, [refresh]);
-
-
-
     return (
-        <div className={"sb-conversation test" + (lightTheme ? "" : " dark")}>
+        <div className={"sb-conversation" + (lightTheme ? "" : " dark")}>
             {((chats.length !== 0 && user) && (chats.map((chat) => {
                 // {console.log("inside con - container : ",chat)}
                 return (

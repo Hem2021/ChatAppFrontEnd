@@ -9,6 +9,7 @@ import { useState } from 'react';
 
 function ConversationItem({ chat }) {
   var { selectedchat, setselectedchat, notifications, setNotifications } = useContext(globalContext);
+  var navigate = useNavigate();
   const [isnotification, setIsnotification] = useState(false)
   var user = getLoggedUser();
   var { _id: curr_user_id, pp } = user;
@@ -29,26 +30,27 @@ function ConversationItem({ chat }) {
   var otheruserdetails = getotheruserdetails(users, curr_user_id);
   // console.log("Other : ",otheruserdetails)
 
-  var navigate = useNavigate();
   useEffect(() => {
     var utili = notifications.includes(chat._id);
-    console.log('====================================');
-    console.log("utility for notification , chat id : ", chat._id, " bool :", utili);
-    console.log('====================================');
+    // console.log("utility for notification , chat id : ", chat._id, " bool :", utili);
     setIsnotification(utili)
 
   }, [notifications])
-
-
+  
   return (
     <div
-      onClick={() => {
-        // setselectedchat({ chat, otheruserdetails });
-        localStorage.setItem("otherUserInfo", JSON.stringify(otheruserdetails));
-        setNotifications((prevNotifications) => prevNotifications.filter(id => id !== chat._id));
+    onClick={() => {
+      // setselectedchat({ chat, otheruserdetails });
+      
+      localStorage.setItem("otherUserInfo", JSON.stringify(otheruserdetails));
+      // console.log("inside con item , chatid now 1: ", chat._id);
+      navigate('/app/chat/' + chat._id);
+      console.log("inside con item , chatid now 2: ", chat._id);
         setIsnotification(false);
+        console.log('after set is notification')
+        setNotifications((prevNotifications) => prevNotifications.filter(id => id !== chat._id));
+        console.log('after set is context notifs')
         // navigate('chat');
-        navigate('chat/' + chat._id);
       }
       }
       // className={'conversation-container' + (selectedchat.chat === chat ? ' selected' : '') + isnotification===true?  ' notification' : ''}
