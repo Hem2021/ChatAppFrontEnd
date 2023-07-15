@@ -69,7 +69,7 @@ function Base() {
             return;
         }
         console.log(pics);
-        if (pics.type === "image/jpeg") {
+        if (pics.type === "image/jpeg" || pics.type === "image/png" || pics.type === "image/jpg") {
             const data = new FormData();
             data.append("file", pics);
             data.append("upload_preset", "chat-app-pp");
