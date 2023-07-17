@@ -1,3 +1,6 @@
+/* html{
+    height: -webkit-fill-available;
+} */
 .dark {
     /* background-color: #2d3941; */
     background-color: #2d3941 !important;
@@ -67,6 +70,7 @@
 .ou-item:hover,
 .gp-item:hover {
     background-color: #eeeded;
+    cursor: pointer;
 }
 
 .Sidebar {
@@ -174,6 +178,7 @@
     column-gap: 10px;
     border-radius: 20px;
     border-bottom: 2px solid rgb(243, 241, 237);
+    cursor: pointer;
     /* background-color: white; */
 
 }
@@ -520,7 +525,8 @@
     .MainContainer,
     .login-container {
         width: 100vw;
-        height: 100svh;
+        /* height: fit-content; */
+        height: -webkit-fill-available;
         border-radius: 0px;
     }
 
