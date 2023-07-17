@@ -22,6 +22,8 @@ function OnlineUsers() {
     var [users, setusers] = useState([]);
     const [activeUsers, setActiveUsers] = useState([])
     const [buttonstate, setButtonstate] = useState(false);
+    var [usersSearchResults, setUsersSearchResults] = useState([])
+    var [activeUsersSearchResults, setActiveUserSearchResults] = useState([])
 
     // var [searchresult, setsearchresult] = useState([]);
     var [searchinput, setsearchinput] = useState();
@@ -73,6 +75,7 @@ function OnlineUsers() {
                     <span>No Online Users</span>
                 } else {
                     setusers(data);
+                    setUsersSearchResults(data);
 
                 }
                 setLoading(false)
@@ -93,6 +96,7 @@ function OnlineUsers() {
             // console.log('temp : ', temp)
             // console.log('users : ', users)
             setActiveUsers(temp);
+            setActiveUserSearchResults(temp);
         })
 
         return () => {
@@ -100,7 +104,26 @@ function OnlineUsers() {
         }
     }, [socket, users])
 
-    console.log('active users : ', activeUsers);
+    // console.log('active users : ', activeUsers);
+
+    const handleLocalSearch = (e) => {
+        var keyword = e.target.value;
+        // setQuery(keyword);
+        const UsersfilteredUsers = users.filter((user) =>
+            user.name.toLowerCase().includes(keyword.toLowerCase())
+        );
+        const ActiveUsersfilteredUsers = activeUsers.filter((activeuser) =>
+            activeuser.name.toLowerCase().includes(keyword.toLowerCase())
+        );
+
+        if (!keyword.length) {
+            setUsersSearchResults(users);
+            setActiveUserSearchResults(activeUsers);
+        } else {
+            setUsersSearchResults(UsersfilteredUsers);
+            setActiveUserSearchResults(ActiveUsersfilteredUsers);
+        }
+    }
 
     return (
         <div className='ou-container'>
@@ -114,23 +137,19 @@ function OnlineUsers() {
                 }}>All Users</p>
             </div>
             <div className='ou-search'>
-                <IconButton onClick={handleSearch}>
+                <IconButton onClick={handleLocalSearch}>
                     <SearchIcon />
                 </IconButton>
-                {/* <input className='sb-search-input' placeholder='search' onChange={(e) => {
-                    setsearchinput(e.target.value)
-                }}></input> */}
+                {/* <input className='sb-search-input' placeholder='search' onChange={handleLocalSearch}></input> */}
 
                 <input
                     className="sb-search-input"
                     placeholder="search"
-                    onChange={(e) => {
-                        setsearchinput(e.target.value);
-                    }}
+                    onChange={handleLocalSearch}
                     onKeyDown={(e) => {
                         if (e.key === 'Enter') {
                             e.preventDefault(); // Prevent form submission or other default behavior
-                            handleSearch();
+                            // handleSearch();
                         }
                     }}
                 />
@@ -142,13 +161,13 @@ function OnlineUsers() {
                     <Button sx={{ borderRadius: "20px" }} color='success' variant="contained" onClick={handlebutton}>{buttonstate ? ("All users") : ("Online Users")}</Button>
                     {!buttonstate ? (
                         <>
-                            {users.map((otherusers) => (
+                            {usersSearchResults.map((otherusers) => (
                                 <UserList key={otherusers._id} otherusers={otherusers} />
                             ))}
                         </>
                     ) : (
                         <>
-                            {activeUsers.map((otherusers) => (
+                            {activeUsersSearchResults.map((otherusers) => (
                                 <UserList key={otherusers._id} otherusers={otherusers} />
                             ))}
                         </>

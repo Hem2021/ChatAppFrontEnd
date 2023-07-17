@@ -80,12 +80,12 @@ function Sidebar({ socket, socketconnected }) {
 
             <div className={"web" + (lightTheme ? "" : " dark")}>
 
-                <div className={"sb-search" + (lightTheme ? "" : " dark")} >
+                {/* <div className={"sb-search" + (lightTheme ? "" : " dark")} >
                     <IconButton>
                         <SearchIcon className={!lightTheme && "dark"} />
                     </IconButton>
                     <input className={"sb-search-input" + (lightTheme ? "" : " dark")} placeholder='search'></input>
-                </div>
+                </div> */}
                 <SbConContainer />
 
             </div>
