@@ -38,18 +38,6 @@ function App() {
     };
   }, []);
 
-  // useEffect(() => {
-  //   var handleUnload = () => {
-  //     console.log('from app');
-  //     navigate('/app/welcome');
-  //   };
-
-  //   window.addEventListener('unload', handleUnload);
-
-  //   return () => {
-  //     window.removeEventListener('unload', handleUnload);
-  //   };
-  // }, [navigate]);
   return (
     <div className='App'>
       {/* <Button colorScheme='blue'>Button</Button> */}

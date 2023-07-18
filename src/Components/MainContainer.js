@@ -1,10 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
 import Sidebar from './Sidebar'
-import ChatArea from './ChatArea'
-import WelcomeArea from './WelcomeArea'
-import Creategroup from './Creategroup'
-import Login from './Login'
-import OnlineUsers from './OnlineUsers'
 import { Outlet, useOutletContext, useParams } from 'react-router-dom'
 import ContextProvider, { globalContext } from '../Contex/ContextProvider'
 import io from 'socket.io-client';
@@ -31,9 +26,21 @@ function MainContainer() {
       setsocketconnected(!socketconnected);
     })
 
+    socket.on('disconnect', () => {
+      console.log(' ❌ Socket disconnected');
+    });
+    socket.on('error', (error) => {
+      console.error(' ❌ Socket connection error:', error);
+    });
+    socket.on('reconnect_error', (error) => {
+      console.error(' ❌ Socket reconnection error:', error);
+    });
+
     return () => {
       socket.off('connected');
-
+      socket.off('error')
+      socket.off('disconnect')
+      socket.off('reconnect_error')
     }
   }, []);
 
@@ -45,65 +52,23 @@ function MainContainer() {
       if (!chat_id || chat_id != newmsg.chat._id) {
         console.log("put in notification ");
         setNotifications((prevNotifs) =>
-                [
-                  ...prevNotifs,
-                  newmsg.chat._id
-                ]
-              )
+          [
+            ...prevNotifs,
+            newmsg.chat._id
+          ]
+        )
       } else {
         setNewMessage((state) => newmsg)
       }
 
-          setrefresh((state) => !state);
+      setrefresh((state) => !state);
 
     })
     return () => {
       socket?.off('message recieved')
       console.log('MAIN UNMOUNT')
     }
-  }, [socket,chat_id]);
-
-
-  // useEffect(() => {
-  //   console.log("MAINCONTAINER MOUNTED")
-  //   socket?.on("message recieved", (newMessageRecieved) => {
-  //     console.log('on message received : ', newMessageRecieved, "chatID :  ", chat_id);
-  //     if (
-  //       // !selectedChatCompare || // if chat is not selected or doesn't match current chat
-  //       chat_id !== newMessageRecieved.chat._id || !chat_id
-  //     ) {
-  //       console.log("Notification : ", newMessageRecieved);
-  //       setNotifications((prevNotifs) =>
-  //         [
-  //           ...prevNotifs,
-  //           newMessageRecieved.chat._id
-  //         ]
-  //       )
-
-  //     } else {
-  //       // setAllMessages((state) =>
-  //       //   [
-  //       //     ...state,
-
-  //       //     newMessageRecieved
-
-  //       //   ]
-
-  //       // )
-  //       setNewMessage((state) => newMessageRecieved)
-  //     }
-
-  //     console.log("msg from socket in MAIN CONTAINER: ", newMessageRecieved);
-  //     setrefresh((state) => !state);
-  //   });
-
-
-  //   return () => {
-  //     socket?.off('message received');
-  //     console.log("MAIN CONTAINER UNMOUNTED");
-  //   };
-
-  // }, [socket, refresh, notifications, chat_id]);
+  }, [socket, chat_id]);
 
   return (
 

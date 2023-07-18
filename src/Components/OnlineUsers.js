@@ -18,9 +18,9 @@ const SERVER_BASE_URL = getBaseUrlForServer();
 
 function OnlineUsers() {
     var lightTheme = useSelector((state) => { return state.lightTheme });
-    const { refresh, setrefresh } = useContext(globalContext);
+    const { refresh, setrefresh, activeUsers, setActiveUsers } = useContext(globalContext);
     var [users, setusers] = useState([]);
-    const [activeUsers, setActiveUsers] = useState([])
+    // const [activeUsers, setActiveUsers] = useState([])
     const [buttonstate, setButtonstate] = useState(false);
     var [usersSearchResults, setUsersSearchResults] = useState([])
     var [activeUsersSearchResults, setActiveUserSearchResults] = useState([])

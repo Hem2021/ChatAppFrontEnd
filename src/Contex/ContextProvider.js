@@ -12,6 +12,7 @@ function ContextProvider({ children }) {
     const [refresh, setrefresh] = useState(true);
     const [notifications, setNotifications] = useState([])
     const [newMessage, setNewMessage] = useState({})
+    const [activeUsers, setActiveUsers] = useState([])
 
     const navigate = useNavigate();
     console.log("from context, selectd chat : ", selectedchat);
@@ -38,7 +39,7 @@ function ContextProvider({ children }) {
 
     return (
         // <div>ContextProvider</div>
-        <globalContext.Provider value={{ newMessage, setNewMessage, user, setUser, refresh, setrefresh, selectedchat, setselectedchat, chatloading, setchatloading, notifications, setNotifications }} >
+        <globalContext.Provider value={{ activeUsers, setActiveUsers, newMessage, setNewMessage, user, setUser, refresh, setrefresh, selectedchat, setselectedchat, chatloading, setchatloading, notifications, setNotifications }} >
             {children}
         </globalContext.Provider>
 

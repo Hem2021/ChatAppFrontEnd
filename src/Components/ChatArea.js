@@ -162,6 +162,19 @@ function ChatArea() {
         // };
     }, [socket]);
 
+    useEffect(() => {
+        socket?.emit('get active users');
+        socket?.on('all active users', (res) => {
+            // const check= res.includes(otheruser?._id);
+            // console.log("other user active ? ", otheruser.name," : ", check );
+            console.log("res from chat area active : ",res)
+        })
+
+        return () => {
+            socket?.off('get active users')
+        }
+    }, [socket])
+
     var typingHandler = (e) => {
         console.log("socket status : ", socketconnected)
         setmessageContent(e.target.value);
@@ -263,8 +276,8 @@ function ChatArea() {
                 ) : (
                     AllMessages.slice(0).map((message, index) => {
                         const sender = message.sender;
-                        const self_id = user._id;
-                        if (sender._id === self_id) {
+                        const self_id = user?._id;
+                        if (sender?._id === self_id) {
                             return <MessageSelf props={message} key={index} />;
                         } else {
                             return <MessageOther props={message} key={index} />;
