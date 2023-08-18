@@ -266,10 +266,10 @@ function Base() {
                                 onChange={handleinput}
                                 autoComplete="current-password"
                             />
-                            <FormControlLabel
+                            {/* <FormControlLabel
                                 control={<Checkbox value="remember" color="primary" />}
                                 label="Remember me"
-                            />
+                            /> */}
                             <LoadingButton
                                 type="submit"
                                 fullWidth
@@ -285,11 +285,11 @@ function Base() {
                             {alert.active && (<><AlertUser msg={alert.msg} cause={alert.cause} resetState={resetAlertState} /> </>)}
 
                             <Grid container>
-                                <Grid item xs>
+                                {/* <Grid item xs>
                                     <Link href="#" variant="body2">
                                         Forgot password?
                                     </Link>
-                                </Grid>
+                                </Grid> */}
                                 <Grid item>
                                     <span style={{ color: "blue", cursor: "pointer" }} onClick={() => setLogin(false)}>
 
@@ -416,12 +416,12 @@ function Base() {
                                     )}
                                 </Grid>
 
-                                <Grid item xs={12}>
+                                {/* <Grid item xs={12}>
                                     <FormControlLabel
                                         control={<Checkbox value="allowExtraEmails" color="primary" />}
                                         label="I want to receive inspiration, marketing promotions and updates via email."
                                     />
-                                </Grid>
+                                </Grid> */}
                             </Grid>
 
                             <LoadingButton

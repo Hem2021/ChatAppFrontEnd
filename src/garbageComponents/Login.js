@@ -15,7 +15,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import axios from 'axios';
 import LoadingButton from '@mui/lab/LoadingButton';
-import AlertUser from './AlertUser';
+import AlertUser from '../Components/AlertUser';
 
 // import { createTheme, ThemeProvider } from '@mui/material/styles';
 
@@ -174,11 +174,11 @@ function Login() {
           </LoadingButton>
           {alert.active && (<><AlertUser msg={alert.msg} cause={alert.cause} resetState={resetAlertState} /> </>)}
           <Grid container>
-            <Grid item xs>
+            {/* <Grid item xs>
               <Link href="#" variant="body2">
                 Forgot password?
               </Link>
-            </Grid>
+            </Grid> */}
             <Grid item>
               <Link to={"/signUp"} variant="body2">
                 {"Don't have an account? Sign Up"}

@@ -12,8 +12,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { Link, Route, Routes, useNavigate } from 'react-router-dom';
-import FileInput from './PpUpload';
-import AlertUser from './AlertUser';
+import FileInput from '../Components/PpUpload';
+import AlertUser from '../Components/AlertUser';
 import { useState } from 'react';
 import LoadingButton from '@mui/lab/LoadingButton';
 import axios from "axios";
@@ -312,12 +312,12 @@ function SignUp() {
                             )}
                         </Grid>
 
-                        <Grid item xs={12}>
+                        {/* <Grid item xs={12}>
                             <FormControlLabel
                                 control={<Checkbox value="allowExtraEmails" color="primary" />}
                                 label="I want to receive inspiration, marketing promotions and updates via email."
                             />
-                        </Grid>
+                        </Grid> */}
                     </Grid>
 
                     <LoadingButton

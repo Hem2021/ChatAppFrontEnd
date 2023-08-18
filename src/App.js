@@ -7,7 +7,7 @@ import WelcomeArea from './Components/WelcomeArea';
 import ChatArea from './Components/ChatArea';
 import OnlineUsers from './Components/OnlineUsers';
 import Creategroup from './Components/Creategroup';
-import Login from './Components/Login';
+import Login from './garbageComponents/Login';
 import Group from './Components/Group';
 import Test from './Components/Test';
 import Base from './Components/Base';
@@ -21,10 +21,10 @@ import Chats from './Components/Chats';
 function App() {
   var navigate = useNavigate();
 
-  
+
   // var user = getLoggedUser();
 
- 
+
 
   useEffect(() => {
     var handleBeforeUnload = (e) => {
