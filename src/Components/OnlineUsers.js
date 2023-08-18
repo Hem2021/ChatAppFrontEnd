@@ -127,23 +127,23 @@ function OnlineUsers() {
 
     return (
         <div className='ou-container'>
-            <div className='ou-header'>
+            <div className={'ou-header '+ (lightTheme?'':'dark')}>
                 <img src={logo} style={{ width: "36px" }} alt='logo' className='ou-header-logo'></img>
-                <p style={{
+                <p className={(lightTheme?"":"dark2")} style={{
                     fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
                     fontSize: "1rem",
                     color: "rgba(0, 0, 0, 0.54)",
                     fontWeight: "bold"
                 }}>All Users</p>
             </div>
-            <div className='ou-search'>
+            <div className={'ou-search '+ (lightTheme?'':'dark') }>
                 <IconButton onClick={handleLocalSearch}>
                     <SearchIcon />
                 </IconButton>
                 {/* <input className='sb-search-input' placeholder='search' onChange={handleLocalSearch}></input> */}
 
                 <input
-                    className="sb-search-input"
+                    className={"sb-search-input "+ (lightTheme?"":"dark") }
                     placeholder="search"
                     onChange={handleLocalSearch}
                     onKeyDown={(e) => {

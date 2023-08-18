@@ -9,12 +9,6 @@ function Chats() {
     return (
         // <div>Chats</div>
         <div className={"mob" + (lightTheme ? "" : " dark")}>
-            <div className={"sb-search" + (lightTheme ? "" : " dark")} >
-                <IconButton>
-                    <SearchIcon className={!lightTheme && "dark"} />
-                </IconButton>
-                <input className={"sb-search-input" + (lightTheme ? "" : " dark")} placeholder='search'></input>
-            </div>
             <SbConContainer />
 
         </div>

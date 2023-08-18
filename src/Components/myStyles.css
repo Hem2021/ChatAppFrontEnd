@@ -265,6 +265,10 @@
     background-color: white;
 }
 
+.chatarea-header:hover {
+    cursor: pointer;
+}
+
 .header-text {
     display: flex;
     flex-direction: column;

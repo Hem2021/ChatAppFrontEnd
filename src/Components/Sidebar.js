@@ -50,16 +50,23 @@ function Sidebar({ socket, socketconnected }) {
                     }} >
                         <PersonAddIcon className={!lightTheme && "dark"} />
                     </IconButton>
-                    <IconButton onClick={() => {
+
+                    {/* TO DO : connect with "group" api on backend and give functionality */}
+
+                    {/* <IconButton onClick={() => {
                         navigate('groups');  // TODO: add available-group component
                     }} >
                         <GroupAddIcon className={!lightTheme && "dark"} />
-                    </IconButton>
-                    <IconButton onClick={() => {
+                    </IconButton> */}
+
+                    {/* <IconButton onClick={() => {
                         navigate('create-group');
                     }} >
                         <AddCircleIcon className={!lightTheme && "dark"} />
-                    </IconButton>
+                    </IconButton> */}
+
+
+
                     <IconButton onClick={() => {
                         setLightTheme();
                     }}>
@@ -79,15 +86,7 @@ function Sidebar({ socket, socketconnected }) {
             </div>
 
             <div className={"web" + (lightTheme ? "" : " dark")}>
-
-                {/* <div className={"sb-search" + (lightTheme ? "" : " dark")} >
-                    <IconButton>
-                        <SearchIcon className={!lightTheme && "dark"} />
-                    </IconButton>
-                    <input className={"sb-search-input" + (lightTheme ? "" : " dark")} placeholder='search'></input>
-                </div> */}
                 <SbConContainer />
-
             </div>
 
         </div>

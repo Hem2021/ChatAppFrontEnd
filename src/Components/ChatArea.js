@@ -19,10 +19,12 @@ import Lottie from "lottie-react"
 import typinganimation from "../animations/typing.json"
 import { red } from '@mui/material/colors';
 import DialogBox from './misc/DialogBox';
+import Card from './Card';
 
 const SERVER_BASE_URL = getBaseUrlForServer();
 
 function ChatArea() {
+    var [card, setCard] = React.useState(false);
     var [AllMessages, setAllMessages] = useState([]);
     var [loading, setloading] = useState(true)
     const [messageContent, setmessageContent] = useState("")
@@ -167,7 +169,7 @@ function ChatArea() {
         socket?.on('all active users', (res) => {
             // const check= res.includes(otheruser?._id);
             // console.log("other user active ? ", otheruser.name," : ", check );
-            console.log("res from chat area active : ",res)
+            console.log("res from chat area active : ", res)
         })
 
         return () => {
@@ -246,6 +248,11 @@ function ChatArea() {
 
     }
 
+    const toggleCard = () => {
+        console.log('inside toggle card : ' + card);
+        setCard(!card);
+    }
+
 
 
 
@@ -257,7 +264,7 @@ function ChatArea() {
     return (
         <div className='chatArea-container'>
 
-            <div className={"chatarea-header" + (lightTheme ? "" : " dark")}>
+            <div className={"chatarea-header" + (lightTheme ? "" : " dark")} onClick={toggleCard} >
                 <Profilepic pp={otheruser?.pp} firstname={otheruser?.name[0]} />
                 <div className='header-text'>
                     <div className={"con-title" + (lightTheme ? "" : " dark")}>{otheruser?.name}</div>
@@ -268,6 +275,7 @@ function ChatArea() {
                 </IconButton>
             </div>
             {deleteDialog && <DialogBox msg={{ title: "Delete ?", body: "This can't be undone. " }} cb={deleteChat} reset={() => setDeleteDialog(false)} />}
+            {(card && otheruser) && <Card card = {card} toggleCard = {toggleCard}  user = {otheruser}/>}
 
 
             <div className={"chatarea-body" + (lightTheme ? "" : " dark")}>

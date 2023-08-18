@@ -7,15 +7,17 @@ import { Avatar, Divider, ListItemIcon } from '@mui/material';
 import { Logout, Settings } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { getLoggedUser } from './misc/utili';
+import Card from './Card';
 // import { Navigate } from 'react-router-dom';
 
 
 export default function BasicMenu() {
+  var [card, setCard] = React.useState(false);
   var { setselectedchat } = React.useContext(globalContext);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const navigate = useNavigate();
   const user = getLoggedUser();
-  if(!user){
+  if (!user) {
     navigate('/');
   }
   const open = Boolean(anchorEl);
@@ -35,6 +37,11 @@ export default function BasicMenu() {
     setselectedchat({});
 
     navigate('/', { replace: true });
+  }
+
+  const toggleCard = ()=>{
+    console.log('inside toggle card : '+ card);
+    setCard(!card);
   }
 
 
@@ -60,20 +67,23 @@ export default function BasicMenu() {
         }}
       >
 
-        <MenuItem onClick={handleClose}>
+        {/* TO DO : Implement "Profile" and "Settings"  Logic  */}
+
+        <MenuItem onClick={toggleCard}>
           <ListItemIcon>
             <Avatar sx={{ width: 25, height: 25 }} />
           </ListItemIcon>
           Profile
         </MenuItem>
+        {card && <Card card = {card} toggleCard = {toggleCard}  user = {user}/>}
 
-        <Divider />
+        {/* <Divider />
         <MenuItem onClick={handleClose}>
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>
           Settings
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem onClick={logOutUser}>
           <ListItemIcon>
             <Logout fontSize="small" />
